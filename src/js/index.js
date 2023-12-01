@@ -20,13 +20,17 @@ async function onSubmit(event){
     const input = refs.form.elements[0];
     const inputData = input.value.trim();
 
-    console.log(inputData)
-
-    const searchData = await serviceSearch(inputData);
-    console.log(searchData);
-
-    const {hits} = searchData;
-    refs.gallery.innerHTML = createMarkup(hits);
+    try {
+        const searchData = await serviceSearch(inputData);
+        console.log(searchData);
+    
+        const array= searchData.hits
+        console.log(array);
+        refs.gallery.innerHTML = createMarkup(array);
+    }
+    catch (err){
+        console.error(err);
+    }
 
 }
 
