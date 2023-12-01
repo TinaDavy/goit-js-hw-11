@@ -7,6 +7,34 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <!-- Header section #3F57B3 -->
+  <header>
+    <section class="header">
+      <div class="form-container">
+        <form class="search-form" id="search-form">
+          <input
+            type="text"
+            name="searchQuery"
+            autocomplete="off"
+            placeholder="Search images..."
+          />
+          <button class="js-search search-btn" type="submit">Search</button>
+        </form>
+      </div>
+    </section>
+
+  </header>
+<!-- Main section -->
+<main>
+  <!-- Images gellary -->
+  <section class="images-gellary">
+    <div class="gellary js-gellary"></div>
+    <!-- Load more button -->
+    <div class="button-container">
+      <button class="js-load-more load-more hidden">Load more</button>
+    </div>
+  </section>
+</main>
   <script src="./js/index.js" type="module"></script>
 </body>
 </html>
