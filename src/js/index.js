@@ -1,8 +1,8 @@
 import axios from "axios";
 import Notiflix from "notiflix";
-import "simplelightbox/dist/simple-lightbox.min.css"
 
 import { createMarkup } from "./markup";
+import { serviceSearch } from "./service-search";
 
 const refs = {
     form: document.querySelector("#search-form"),
@@ -44,6 +44,15 @@ async function onSubmit(event){
             refs.loadMoreBtn.addEventListener("click", handleMoreBtn);
         }
 
+        const localStorageKey = "last serach value";
+        localStorage.setItem(localStorageKey, inputData);
+
+        const lastSearch = localStorage.getItem(localStorageKey)
+
+        if(lastSearch !== inputData){
+            page = 1;
+        }
+
     }
     catch (err){
         console.error(err);
@@ -66,18 +75,6 @@ async function handleMoreBtn() {
 };
 
 
-async function serviceSearch(requestData, page){
-    try{
-        const BASE_URL = "https://pixabay.com/api";
-        const API_KEY = "41011803-a96263b547d952e0549f5a687"
-        
-        const {data} = await axios.get(`${BASE_URL}/?key=${API_KEY}&per_page=40&page=${page}&q=${requestData}`);
-        return data;
-    } catch(err) {
-        console.error(err);
-    }     
-};
 
 
-console.log(page)
 
