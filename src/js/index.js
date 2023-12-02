@@ -11,13 +11,14 @@ const refs = {
     loadMoreBtn: document.querySelector(".js-load-more")
 }
 
-let page = 1;
+let page = 0;
 const input = refs.form.elements[0];
 
 
 refs.form.addEventListener("submit", onSubmit);
 async function onSubmit(event){
     event.preventDefault();
+    page = 1;
 
     const inputData = input.value.trim();
 
@@ -28,6 +29,7 @@ async function onSubmit(event){
         const totalImg = searchData.total
 
         if(searchData.totalHits === 0){
+            refs.loadMoreBtn.classList.add("hidden");
             Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
         } else {
             Notiflix.Notify.success(`Hooray! We found ${totalImg} images`);
@@ -44,14 +46,14 @@ async function onSubmit(event){
             refs.loadMoreBtn.addEventListener("click", handleMoreBtn);
         }
 
-        const localStorageKey = "last serach value";
-        localStorage.setItem(localStorageKey, inputData);
+        // const localStorageKey = "last serach value";
+        // localStorage.setItem(localStorageKey, inputData);
 
-        const lastSearch = localStorage.getItem(localStorageKey)
+        // const lastSearch = localStorage.getItem(localStorageKey)
 
-        if(lastSearch !== inputData){
-            page = 1;
-        }
+        // if(lastSearch !== inputData){
+        //     page = 1;
+        // }
 
     }
     catch (err){

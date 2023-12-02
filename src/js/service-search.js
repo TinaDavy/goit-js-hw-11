@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function serviceSearch(requestData, page){
+async function serviceSearch(requestData, page = 1){
     try{
         const BASE_URL = "https://pixabay.com/api";
         const API_KEY = "41011803-a96263b547d952e0549f5a687"
