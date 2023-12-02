@@ -11,6 +11,7 @@ const refs = {
     loadMoreBtn: document.querySelector(".js-load-more")
 }
 
+
 let page = 0;
 const input = refs.form.elements[0];
 
@@ -24,7 +25,7 @@ async function onSubmit(event){
 
     try {
         const searchData = await serviceSearch(inputData, page);
-        console.log(searchData);
+        // console.log(searchData);
         const array= searchData.hits
         const totalImg = searchData.total
 
@@ -35,25 +36,16 @@ async function onSubmit(event){
             Notiflix.Notify.success(`Hooray! We found ${totalImg} images`);
         }
 
-        console.log(array);
+        // console.log(array);
         refs.gallery.innerHTML = createMarkup(array);
 
-        const totalpages = totalImg / 40;
-        console.log(totalpages)
+        const totalpages = (totalImg / 40).toFixed(0);
+        // console.log(totalpages)
 
         if(page >= 1 && page < totalpages) {
             refs.loadMoreBtn.classList.remove("hidden");
             refs.loadMoreBtn.addEventListener("click", handleMoreBtn);
         }
-
-        // const localStorageKey = "last serach value";
-        // localStorage.setItem(localStorageKey, inputData);
-
-        // const lastSearch = localStorage.getItem(localStorageKey)
-
-        // if(lastSearch !== inputData){
-        //     page = 1;
-        // }
 
     }
     catch (err){
@@ -65,12 +57,21 @@ async function onSubmit(event){
 async function handleMoreBtn() {
     page += 1;
     refs.loadMoreBtn.disabled = true;
-
+    
     const data = input.value
-    console.log(data)
+    // console.log(data)
     const newSearch = await serviceSearch(data, page);
-    console.log(newSearch);
+    // console.log(newSearch);
     const nextArray= newSearch.hits
+    const totalImg = newSearch.total
+    const totalpages = (totalImg / 40).toFixed(0)
+    // console.log("page", typeof(page));
+    // console.log("totalpages", typeof(totalpages));
+
+    if (page === Number(totalpages)){
+        refs.loadMoreBtn.classList.add("hidden");
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+    }
 
     refs.gallery.insertAdjacentHTML("beforeend", createMarkup(nextArray));
     refs.loadMoreBtn.disabled = false;
