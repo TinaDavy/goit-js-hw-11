@@ -36,7 +36,7 @@ async function onSubmit(event){
         console.log(array);
         refs.gallery.innerHTML = createMarkup(array);
 
-        totalpages = totalImg / 40;
+        const totalpages = totalImg / 40;
         console.log(totalpages)
 
         if(page >= 1 && page < totalpages) {
