@@ -1,4 +1,8 @@
 import axios from "axios";
+import Notiflix from "notiflix";
+import "simplelightbox/dist/simple-lightbox.min.css"
+
+import { createMarkup } from "./markup";
 
 const refs = {
     form: document.querySelector("#search-form"),
@@ -6,11 +10,6 @@ const refs = {
     gallery: document.querySelector(".js-gellary"),
     loadMoreBtn: document.querySelector(".js-load-more")
 }
-
-// console.log(refs.form)
-// console.log(refs.searchBtn)
-// console.log(refs.gallery)
-// console.log(refs.loadMoreBtn)
 
 
 refs.form.addEventListener("submit", onSubmit);
@@ -23,10 +22,18 @@ async function onSubmit(event){
     try {
         const searchData = await serviceSearch(inputData);
         console.log(searchData);
-    
         const array= searchData.hits
+
+        if(searchData.totalHits === 0){
+            Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+        } else {
+            const totalImg = searchData.total
+            Notiflix.Notify.success(`Hooray! We found ${totalImg} images`);
+        }
+
         console.log(array);
         refs.gallery.innerHTML = createMarkup(array);
+
     }
     catch (err){
         console.error(err);
@@ -34,34 +41,11 @@ async function onSubmit(event){
 
 }
 
+
 async function serviceSearch(requestData){
     const BASE_URL = "https://pixabay.com/api";
     const API_KEY = "41011803-a96263b547d952e0549f5a687"
 
-    const {data} = await axios.get(`${BASE_URL}/?key=${API_KEY}&q=${requestData}`);
+    const {data} = await axios.get(`${BASE_URL}/?key=${API_KEY}&per_page=40&q=${requestData}`);
     return data;    
 };
-
-function createMarkup(arr){
-    const markup = arr.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
-        `<div class="photo-card">
-        <img src="${webformatURL}" alt="${tags}" loading="lazy" />
-        <div class="info">
-          <p class="info-item">
-            <b>Likes ${likes}</b>
-          </p>
-          <p class="info-item">
-            <b>Views ${views}</b>
-          </p>
-          <p class="info-item">
-            <b>Comments ${comments}</b>
-          </p>
-          <p class="info-item">
-            <b>Downloads ${downloads}</b>
-          </p>
-        </div>
-      </div>`
-    });
-
-    return markup.join('');
-}
